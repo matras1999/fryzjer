@@ -24,7 +24,7 @@ class UmowWizyteController extends Controller
             $date_end = clone $date;
             $date_end->add(new \DateInterval('PT1H'));
             $reservations[] = [
-                'title' => 'rezerwowane',
+                'title' => 'rezerwacja',
                 'start' => $date->format('c'),
                 'end' => $date_end->format('c'),
             ];

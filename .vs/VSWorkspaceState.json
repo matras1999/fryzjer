@@ -3,15 +3,14 @@
     "",
     "\\app",
     "\\app\\Http",
-    "\\app\\Http\\Controllers",
-    "\\app\\Http\\Controllers\\Auth",
-    "\\app\\Models",
-    "\\database",
-    "\\database\\migrations",
+    "\\public",
     "\\resources",
+    "\\resources\\css",
+    "\\resources\\js",
     "\\resources\\views",
-    "\\routes"
+    "\\resources\\views\\auth",
+    "\\resources\\views\\layouts"
   ],
-  "SelectedNode": "\\app\\Models\\Reservation.php",
+  "SelectedNode": "\\public",
   "PreviewInSolutionExplorer": false
 }

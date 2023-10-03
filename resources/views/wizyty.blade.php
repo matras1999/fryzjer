@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-    @if(\Session::has('message')))
+    @if(\Session::has('message'))
         <div class="row">
             <div class="col-12 text-white bg-success">
                 {{ \Session::get('message') }}
@@ -10,11 +10,11 @@
         </div>
     @endif
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-9 calendar-container"> <!-- Aktualizacja: Dodano klasę "calendar-container" -->
                 <h2>Kalendarz</h2>
                 <div id='calendar'></div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3"> <!-- Aktualizacja: 1/4 szerokości ekranu -->
                 <h2>Umów wizytę</h2>
                 <form method="POST" action="{{ route('umow_wizyte') }}">
                     @csrf
@@ -40,10 +40,19 @@
             
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: @json($reservations)
+                events: @json($reservations),
+                timeZone: 'Europe/Warsaw',
+                timeFormat: 'H:mm' // Format godziny (24-godzinny)
             });
 
             calendar.render();
         });
     </script>
+
+    <style>
+        /* Aktualizacja: Dodano regułę CSS dla "calendar-container" */
+        .calendar-container {
+            width: 75%; /* 75% szerokości ekranu */
+        }
+    </style>
 @endsection

@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\UmowWizyteController;
+use App\Http\Controllers\ProduktyController;
+use App\Http\Controllers\ReservationController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,18 +24,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
+
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-// routes/web.php
-
-use App\Http\Controllers\UmowWizyteController;
-use App\Http\Controllers\ProduktyController;
-use App\Http\Controllers\ReservationController;
-
-
-
+//routes/web.php
 Route::get('/umow_wizyte', [UmowWizyteController::class, 'umowWizyte'])->name('umow_wizyte');
 Route::get('/produkty', [ProduktyController::class, 'produkty'])->name('produkty');
-Route::get('/kalendarz', 'TerminWizytyController@wyswietlKalendarz')->name('kalendarz');
+Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
 Route::post('/umow_wizyte', [ReservationController::class, 'store']);
 
 
