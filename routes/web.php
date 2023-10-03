@@ -16,3 +16,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// routes/web.php
+
+use App\Http\Controllers\UmowWizyteController;
+use App\Http\Controllers\ProduktyController;
+use App\Http\Controllers\ReservationController;
+
+
+
+Route::get('/umow_wizyte', [UmowWizyteController::class, 'umowWizyte'])->name('umow_wizyte');
+Route::get('/produkty', [ProduktyController::class, 'produkty'])->name('produkty');
+Route::get('/kalendarz', 'TerminWizytyController@wyswietlKalendarz')->name('kalendarz');
+Route::post('/umow_wizyte', [ReservationController::class, 'store']);
+
+
