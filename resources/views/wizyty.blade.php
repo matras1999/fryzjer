@@ -16,6 +16,7 @@
             </div>
             <div class="col-md-3"> <!-- Aktualizacja: 1/4 szerokości ekranu -->
                 <h2>Umów wizytę</h2>
+
                 <form method="POST" action="{{ route('umow_wizyte') }}">
                     @csrf
                     <div class="form-group">
@@ -26,6 +27,36 @@
                         <label for="godzina">Godzina:</label>
                         <input type="time" class="form-control" name="godzina" required>
                     </div>
+                  <div class="form-group">
+    <label for="rodzaj">Rodzaj wizyty:</label>
+    <select class="form-control" name="rodzaj" id="rodzaj" required>
+        <option value="" data-cena="0">--------</option>
+        <option value="Cięcie zywkłe" data-cena="50">Cięcie Zwykłe - 50 zł</option>
+        <option value="Wizyta 2" data-cena="75">Wizyta 2 - 75 zł</option>
+        <option value="Wizyta 3" data-cena="100">Wizyta 3 - 100 zł</option>
+        <!-- Dodaj więcej opcji, jeśli jest to konieczne -->
+    </select>
+    <input type="hidden" name="cena" id="cena" value="0">
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var rodzajSelect = document.getElementById('rodzaj');
+        var cenaInput = document.getElementById('cena');
+
+        rodzajSelect.addEventListener('change', function() {
+            var selectedOption = rodzajSelect.options[rodzajSelect.selectedIndex];
+            var cena = selectedOption.getAttribute('data-cena');
+            cenaInput.value = cena;
+        });
+    });
+</script>
+
+
+
+                   
+
+
                     <!-- Dodaj inne pola formularza, jeśli są potrzebne -->
                     <button type="submit" class="btn btn-primary">Umów wizytę</button>
                 </form>

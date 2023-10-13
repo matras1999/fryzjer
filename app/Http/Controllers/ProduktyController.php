@@ -8,7 +8,6 @@ class ProduktyController extends Controller
 {
     public function produkty()
 {
-    // Tutaj możesz dodać logikę obsługi strony z produktami
-    // Na przykład, przekierowanie do widoku z listą produktów
+    return view ('produkty');
 }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UmowWizyteController;
 use App\Http\Controllers\ProduktyController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ConfirmController;
 
 
 /*
@@ -33,5 +34,6 @@ Route::get('/umow_wizyte', [UmowWizyteController::class, 'umowWizyte'])->name('u
 Route::get('/produkty', [ProduktyController::class, 'produkty'])->name('produkty');
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
 Route::post('/umow_wizyte', [ReservationController::class, 'store']);
-
+Route::get('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
+Route::post('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 
