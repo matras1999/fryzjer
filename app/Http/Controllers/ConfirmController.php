@@ -4,21 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ConfirmController extends Controller
 {
     public function confirm()
-    {
-        // Pobierz imię zalogowanego klienta
-        $imie_klienta = Auth::user()->name; 
+{
+    // Pobierz numer telefonu zalogowanego klienta
+    $phone = Auth::user()->phone;
 
-        // Pobierz rezerwacje dla konkretnego klienta na podstawie imienia
-        $reservations = Reservation::where('imie_klienta', $imie_klienta)
-            ->orderBy('data')
-            ->get();
+    // Pobierz rezerwacje dla konkretnego klienta na podstawie imienia
+    $reservations = Reservation::where('imie_klienta', Auth::user()->name)
+        ->orderBy('data')
+        ->get();
 
-        return view('confirm', ['reservations' => $reservations]);
-    }
+    // Pobierz dane użytkowników
+    $users = User::all(); // Załóżmy, że masz model User
+
+    return view('confirm', ['reservations' => $reservations, 'phone' => $phone]);
 }
 
-
+}

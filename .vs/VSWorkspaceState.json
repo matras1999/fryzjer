@@ -4,14 +4,15 @@
     "\\app",
     "\\app\\Http",
     "\\app\\Http\\Controllers",
+    "\\app\\Http\\Controllers\\Auth",
     "\\app\\Models",
+    "\\database",
+    "\\database\\migrations",
     "\\resources",
-    "\\resources\\js",
     "\\resources\\views",
-    "\\resources\\views\\auth",
     "\\resources\\views\\layouts",
     "\\routes"
   ],
-  "SelectedNode": "\\app\\Http\\Controllers\\ReservationController.php",
+  "SelectedNode": "\\resources\\views\\auth\\verify.blade.php",
   "PreviewInSolutionExplorer": false
 }

@@ -33,6 +33,6 @@ class ReservationController extends Controller
         $reservation->save();
 
         // Przekieruj użytkownika lub wyświetl komunikat sukcesu
-        return redirect()->back()->with('success', 'Wizyta została umówiona pomyślnie.');
+        return redirect('confirm');
     }
 }

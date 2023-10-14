@@ -6,7 +6,7 @@ use App\Http\Controllers\UmowWizyteController;
 use App\Http\Controllers\ProduktyController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ConfirmController;
-
+use App\Http\Controllers\SmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +36,5 @@ Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'index'])->n
 Route::post('/umow_wizyte', [ReservationController::class, 'store']);
 Route::get('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 Route::post('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
+Route::match(['get', 'post'], '/send-sms', [SmsController::class, 'sendSms'])->name('send-sms');
 

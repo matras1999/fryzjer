@@ -9,6 +9,7 @@
         <tr>
             <th>Imię i Nazwisko Klienta</th>
             <th>Data Wizyty</th>
+            <th>Godzina Wizyty</th>
             <th>Telefon Klienta</th>
             <th>Usługa</th>
         </tr>
@@ -18,7 +19,9 @@
             <tr>
                 <td>{{ $reservation->imie_klienta }}</td>
                 <td>{{ $reservation->data }}</td>
-                <td>{{ $reservation->telefon_klienta }}</td>
+                <td>{{ $reservation->godzina }}</td>
+                <td>{{ Auth::user()->phone }}</td>
+
                 <td>{{ $reservation->rodzaj }}</td>
             </tr>
         @endforeach
@@ -26,6 +29,6 @@
 </table>
 
         
-        <a href="{{ route('home') }}" class="btn btn-primary">Powrót do Kalendarza</a>
+        <a href="{{ route('umow_wizyte') }}" class="btn btn-primary">Powrót do Kalendarza</a>
     </div>
 @endsection
