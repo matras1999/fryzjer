@@ -1,18 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\app",
-    "\\app\\Http",
-    "\\app\\Http\\Controllers",
-    "\\app\\Http\\Controllers\\Auth",
-    "\\app\\Models",
+    "\\config",
     "\\database",
     "\\database\\migrations",
+    "\\public",
     "\\resources",
+    "\\resources\\css",
     "\\resources\\views",
     "\\resources\\views\\layouts",
     "\\routes"
   ],
-  "SelectedNode": "\\resources\\views\\auth\\verify.blade.php",
+  "SelectedNode": "\\app\\Http\\Controllers\\ReservationController.php",
   "PreviewInSolutionExplorer": false
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\ProduktyController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ConfirmController;
 use App\Http\Controllers\SmsController;
+use App\Http\Controllers\ProfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,7 @@ Route::post('/umow_wizyte', [ReservationController::class, 'store']);
 Route::get('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 Route::post('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 Route::match(['get', 'post'], '/send-sms', [SmsController::class, 'sendSms'])->name('send-sms');
+Route::get('/profil', [ProfilController::class, 'profil'])->name('profil');
+Route::post('/upload-avatar', [ProfilController::class, 'uploadAvatar'])->name('upload-avatar');
+Route::put('/update-profile', [ProfilController::class, 'updateProfile'])->name('update-profile');
 

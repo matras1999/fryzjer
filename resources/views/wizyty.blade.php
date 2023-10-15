@@ -10,34 +10,75 @@
         </div>
     @endif
         <div class="row">
-            <div class="col-md-9 calendar-container"> <!-- Aktualizacja: Dodano klasę "calendar-container" -->
+            <div class="col-md-9 calendar-container">
                 <h2>Kalendarz</h2>
                 <div id='calendar'></div>
             </div>
-            <div class="col-md-3"> <!-- Aktualizacja: 1/4 szerokości ekranu -->
+            <div class="col-md-3">
                 <h2>Umów wizytę</h2>
 
                 <form method="POST" action="{{ route('umow_wizyte') }}">
                     @csrf
                     <div class="form-group">
-                        <label for="data">Data:</label>
-                        <input type="date" class="form-control" name="data" required>
-                    </div>
+    <label for="data">Data:</label>
+    <input type="date" class="form-control" name="data" required>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var dataInput = document.querySelector('input[name="data"]');
+
+        dataInput.addEventListener('input', function() {
+            var selectedDate = new Date(dataInput.value);
+            if (selectedDate.getDay() === 0) { // Sprawdź, czy wybrana data to niedziela (0 to niedziela)
+                dataInput.value = ''; // Wyczyść pole daty, jeśli jest to niedziela
+            }
+        });
+
+        // Dezaktywuj niedzielę jako opcję daty
+        dataInput.addEventListener('click', function () {
+            var selectedDate = new Date(dataInput.value);
+            if (selectedDate.getDay() === 0) { // 0 to niedziela
+                dataInput.value = ''; // Wyczyść pole daty, jeśli jest to niedziela
+            }
+        });
+    });
+</script>
+
                     <div class="form-group">
                         <label for="godzina">Godzina:</label>
-                        <input type="time" class="form-control" name="godzina" required>
+                        <select class="form-control" name="godzina" required>
+                            <option value="">Wybierz godzinę</option>
+                            @for ($hour = 8; $hour <= 20; $hour++)
+                                @for ($minute = 0; $minute < 60; $minute += 30)
+                                    @php
+                                        $formattedHour = str_pad($hour, 2, '0', STR_PAD_LEFT);
+                                        $formattedMinute = str_pad($minute, 2, '0', STR_PAD_LEFT);
+                                        $time = "{$formattedHour}:{$formattedMinute}";
+                                    @endphp
+                                    <option value="{{ $time }}">{{ $time }}</option>
+                                @endfor
+                            @endfor
+                        </select>
                     </div>
-                  <div class="form-group">
+                   <div class="form-group">
     <label for="rodzaj">Rodzaj wizyty:</label>
     <select class="form-control" name="rodzaj" id="rodzaj" required>
         <option value="" data-cena="0">--------</option>
-        <option value="Cięcie zywkłe" data-cena="50">Cięcie Zwykłe - 50 zł</option>
-        <option value="Wizyta 2" data-cena="75">Wizyta 2 - 75 zł</option>
-        <option value="Wizyta 3" data-cena="100">Wizyta 3 - 100 zł</option>
-        <!-- Dodaj więcej opcji, jeśli jest to konieczne -->
+        <option value="Strzyżenie Zwykłe" data-cena="60">Strzyżenie Zwykłe - 60 zł</option>
+        <option value="Modelowanie" data-cena="50">Modelowanie - 50 zł</option>
+        <option value="Koloryzacja" data-cena="180">Koloryzacja - 180 zł</option>
+        <option value="Balejaż" data-cena="190">Balejaż - 190 zł</option>
+        <option value="Ombre" data-cena="165">Ombre - 165 zł</option>
+        <option value="Demakijaż+Kolor" data-cena="260">Demakijaż+Kolor - 260 zł</option>
+        <option value="Trwała" data-cena="150">Trwała - 150 zł</option>
+        <option value="Loki" data-cena="120">Loki - 120 zł</option>
+        <option value="Grzywka" data-cena="30">Grzywka - 30 zł</option>
+        <option value="Upięcia" data-cena="140">Upięcia - 140 zł</option>
+
     </select>
-    <input type="hidden" name="cena" id="cena" value="0">
 </div>
+<input type="hidden" name="cena" id="cena" value="0">
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -53,11 +94,6 @@
 </script>
 
 
-
-                   
-
-
-                    <!-- Dodaj inne pola formularza, jeśli są potrzebne -->
                     <button type="submit" class="btn btn-primary">Umów wizytę</button>
                 </form>
             </div>
@@ -68,12 +104,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
-            
+
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 events: @json($reservations),
                 timeZone: 'Europe/Warsaw',
-                timeFormat: 'H:mm' // Format godziny (24-godzinny)
+                timeFormat: 'H:mm'
             });
 
             calendar.render();
@@ -81,9 +117,8 @@
     </script>
 
     <style>
-        /* Aktualizacja: Dodano regułę CSS dla "calendar-container" */
         .calendar-container {
-            width: 75%; /* 75% szerokości ekranu */
+            width: 75%;
         }
     </style>
 @endsection
