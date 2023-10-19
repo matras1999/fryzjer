@@ -10,7 +10,7 @@ class Reservation extends Model
 
     use HasFactory;
     protected $fillable = [
- 'data', 'godzina', 'rodzaj', 'cena', 'imie_klienta',
+ 'data', 'godzina', 'rodzaj', 'cena', 'imie_klienta','availability',
  ];
 
  public function getReservationDateAttribute() {

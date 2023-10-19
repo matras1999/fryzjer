@@ -66,3 +66,21 @@
     "minimum-stability": "stable",
     "prefer-stable": true
 }
+{
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "fullcalendar/core",
+                "version": "5.10.1", // Wersja FullCalendar Core, którą chcesz zainstalować
+                "dist": {
+                    "url": "https://github.com/fullcalendar/core/archive/v5.10.1.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+    "require": {
+        "fullcalendar/core": "5.10.1"
+    }
+}

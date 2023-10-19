@@ -3,35 +3,61 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Reservation;
+use App\Models\Fryzjer; // Zakładając, że istnieje model Fryzjer
+use App\Models\Usluga; // Zakładając, że istnieje model Usluga
+use App\Models\Reservation; // Zakładając, że istnieje model Reservation
 
 class UmowWizyteController extends Controller
 {
-    public function __construct(Reservation $reservationModel)
+    public function showForm()
     {
-        $this->reservationModel = $reservationModel;
-        $this->middleware('auth'); // Dodaj middleware autoryzacji dla tego kontrolera
+        // Pobierz dostępnych fryzjerów
+        $fryzjerzy = Fryzjer::all();
+
+        // Pobierz dostępne usługi
+    $uslugi = Usluga::all();
+$reservations = Reservation::all()->map(function ($reservation) {
+    $color = 'purple'; // Domyślny kolor
+
+    if ($reservation->availability === 'Brak miejsc') {
+        $color = 'red'; // Dla braku miejsc
+    } elseif ($reservation->availability === 'Kilka miejsc') {
+        $color = 'yellow'; // Dla kilku miejsc
+    } elseif ($reservation->availability === 'Wolne') {
+        $color = 'green'; // Dla wolnych miejsc
     }
 
-    public function umowWizyte()
-    {
-        $list = $this->reservationModel->select(["data", "godzina"])->get();
-        //dd($list->first()->reservation_date);
-        $reservations = [];
-        foreach($list as $row) {
-            $date = new \DateTime($row->reservation_date);
-            $date_end = clone $date;
-            $date_end->add(new \DateInterval('PT1H'));
-            $reservations[] = [
-                'title' => 'rezerwacja',
-                'start' => $date->format('c'),
-                'end' => $date_end->format('c'),
-            ];
-        }
-        // Tutaj możesz dodać logikę obsługi umawiania wizyty
-        // Na przykład, przekierowanie do formularza umawiania wizyty
+    return [
+        //'title' => 'Wizyta', // Tytuł wydarzenia
+        'start' => $reservation->data . 'T' . $reservation->godzina, // Data i godzina rozpoczęcia
+        'backgroundColor' => $color, // Kolor tła na podstawie dostępności
+        // Dodaj inne pola, które chcesz wyświetlić w kalendarzu
+    ];
+});
 
-        return view('wizyty')->with(['reservations' => $reservations]);
+
+
+        return view('umow_wizyte', compact('fryzjerzy', 'uslugi','reservations'));
+    }
+
+    public function zapiszWizyte(Request $request)
+    {
+        // Pobierz dane z formularza
+        $data = $request->input('data');
+        $godzina = $request->input('godzina');
+        $fryzjerId = $request->input('fryzjer');
+        $uslugaId = $request->input('usluga');
+
+        // Zapisz rezerwację do bazy danych (model Reservation)
+        $reservation = new Reservation();
+        $reservation->data = $data;
+        $reservation->godzina = $godzina;
+        $reservation->fryzjer_id = $fryzjerId;
+        $reservation->usluga_id = $uslugaId;
+        // Dodaj inne pola, które mogą być wymagane
+        $reservation->save();
+
+        // Przekieruj użytkownika z powiadomieniem o sukcesie lub błędzie
+        return redirect()->back()->with('message', 'Wizyta została umówiona.');
     }
 }

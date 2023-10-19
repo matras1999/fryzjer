@@ -8,6 +8,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ConfirmController;
 use App\Http\Controllers\SmsController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,14 +32,15 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //routes/web.php
-Route::get('/umow_wizyte', [UmowWizyteController::class, 'umowWizyte'])->name('umow_wizyte');
+//Route::get('/umow_wizyte', [UmowWizyteController::class, 'umowWizyte'])->name('umow_wizyte');
 Route::get('/produkty', [ProduktyController::class, 'produkty'])->name('produkty');
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
-Route::post('/umow_wizyte', [ReservationController::class, 'store']);
+//Route::post('/umow_wizyte', [ReservationController::class, 'store']);
 Route::get('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 Route::post('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 Route::match(['get', 'post'], '/send-sms', [SmsController::class, 'sendSms'])->name('send-sms');
 Route::get('/profil', [ProfilController::class, 'profil'])->name('profil');
 Route::post('/upload-avatar', [ProfilController::class, 'uploadAvatar'])->name('upload-avatar');
 Route::put('/update-profile', [ProfilController::class, 'updateProfile'])->name('update-profile');
-
+Route::get('/umow_wizyte', [umowWizyteController::class, 'showForm'])->name('umow_wizyte');
+Route::post('/zapisz-wizyte', [UmowWizyteController::class, 'zapiszWizyte'])->name('zapiszWizyte');

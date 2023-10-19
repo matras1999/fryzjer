@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\config",
-    "\\database",
-    "\\database\\migrations",
+    "\\app",
+    "\\app\\Http",
+    "\\app\\Http\\Controllers",
     "\\public",
     "\\resources",
     "\\resources\\css",
@@ -11,6 +11,6 @@
     "\\resources\\views\\layouts",
     "\\routes"
   ],
-  "SelectedNode": "\\app\\Http\\Controllers\\ReservationController.php",
+  "SelectedNode": "\\app\\Http\\Controllers\\SmsController.php",
   "PreviewInSolutionExplorer": false
 }
