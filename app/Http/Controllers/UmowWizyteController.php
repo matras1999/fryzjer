@@ -17,21 +17,21 @@ class UmowWizyteController extends Controller
         // Pobierz dostępne usługi
     $uslugi = Usluga::all();
 $reservations = Reservation::all()->map(function ($reservation) {
-    $color = 'purple'; // Domyślny kolor
-
     if ($reservation->availability === 'Brak miejsc') {
-        $color = 'red'; // Dla braku miejsc
+        $color = 'red';
     } elseif ($reservation->availability === 'Kilka miejsc') {
-        $color = 'yellow'; // Dla kilku miejsc
+        $color = 'yellow';
     } elseif ($reservation->availability === 'Wolne') {
-        $color = 'green'; // Dla wolnych miejsc
+        $color = 'green';
     }
 
+    // Usuń czas z godziny
+    $start = $reservation->data; // Tylko data, bez godziny
+
     return [
-        //'title' => 'Wizyta', // Tytuł wydarzenia
-        'start' => $reservation->data . 'T' . $reservation->godzina, // Data i godzina rozpoczęcia
-        'backgroundColor' => $color, // Kolor tła na podstawie dostępności
-        // Dodaj inne pola, które chcesz wyświetlić w kalendarzu
+        
+        'start' => $start,
+        'backgroundColor' => $color,
     ];
 });
 
