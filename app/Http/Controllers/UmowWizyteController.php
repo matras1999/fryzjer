@@ -3,61 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fryzjer; // Zakładając, że istnieje model Fryzjer
-use App\Models\Usluga; // Zakładając, że istnieje model Usluga
-use App\Models\Reservation; // Zakładając, że istnieje model Reservation
+use App\Models\Usluga;
+use App\Models\Fryzjer;
 
 class UmowWizyteController extends Controller
 {
-    public function showForm()
+    public function wyswietlUslugi()
     {
-        // Pobierz dostępnych fryzjerów
-        $fryzjerzy = Fryzjer::all();
+        $uslugi = Usluga::all();
+         $fryzjerzy = Fryzjer::all(['id', 'nazwisko', 'imie']); // Pobierz wszystkich fryzjerów
 
-        // Pobierz dostępne usługi
-    $uslugi = Usluga::all();
-$reservations = Reservation::all()->map(function ($reservation) {
-    if ($reservation->availability === 'Brak miejsc') {
-        $color = 'red';
-    } elseif ($reservation->availability === 'Kilka miejsc') {
-        $color = 'yellow';
-    } elseif ($reservation->availability === 'Wolne') {
-        $color = 'green';
+        return view('umow_wizyte', compact('uslugi', 'fryzjerzy'));
     }
 
-    // Usuń czas z godziny
-    $start = $reservation->data; // Tylko data, bez godziny
-
-    return [
-        
-        'start' => $start,
-        'backgroundColor' => $color,
-    ];
-});
-
-
-
-        return view('umow_wizyte', compact('fryzjerzy', 'uslugi','reservations'));
-    }
-
-    public function zapiszWizyte(Request $request)
+    public function wybierzUsluge(Request $request, Usluga $usluga)
     {
-        // Pobierz dane z formularza
-        $data = $request->input('data');
-        $godzina = $request->input('godzina');
-        $fryzjerId = $request->input('fryzjer');
-        $uslugaId = $request->input('usluga');
+        // Pobierz wybranego pracownika z żądania
+        $pracownikId = $request->input("pracownik_{$usluga->id}");
 
-        // Zapisz rezerwację do bazy danych (model Reservation)
-        $reservation = new Reservation();
-        $reservation->data = $data;
-        $reservation->godzina = $godzina;
-        $reservation->fryzjer_id = $fryzjerId;
-        $reservation->usluga_id = $uslugaId;
-        // Dodaj inne pola, które mogą być wymagane
-        $reservation->save();
+        // Tutaj możesz dodać kod obsługi wyboru usługi i pracownika,
+        // na przykład zapis do sesji lub bazy danych.
 
-        // Przekieruj użytkownika z powiadomieniem o sukcesie lub błędzie
-        return redirect()->back()->with('message', 'Wizyta została umówiona.');
+        return redirect()->action([CalendarController::class, 'index'], ['usluga' => $usluga, 'pracownik' => $pracownikId]);
     }
 }

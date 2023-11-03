@@ -2,7 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\app",
-    "\\app\\Models",
+    "\\app\\Http",
+    "\\app\\Http\\Controllers",
     "\\database",
     "\\database\\migrations",
     "\\resources",
@@ -11,6 +12,6 @@
     "\\resources\\views\\layouts",
     "\\routes"
   ],
-  "SelectedNode": "\\resources\\views\\produkty.blade.php",
+  "SelectedNode": "\\app\\Http\\Controllers\\UmowWizyteController.php",
   "PreviewInSolutionExplorer": false
 }

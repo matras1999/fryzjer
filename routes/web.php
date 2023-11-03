@@ -8,7 +8,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ConfirmController;
 use App\Http\Controllers\SmsController;
 use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\EventController;
+use App\Http\Controllers\CalendarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,5 +42,11 @@ Route::match(['get', 'post'], '/send-sms', [SmsController::class, 'sendSms'])->n
 Route::get('/profil', [ProfilController::class, 'profil'])->name('profil');
 Route::post('/upload-avatar', [ProfilController::class, 'uploadAvatar'])->name('upload-avatar');
 Route::put('/update-profile', [ProfilController::class, 'updateProfile'])->name('update-profile');
-Route::get('/umow_wizyte', [umowWizyteController::class, 'showForm'])->name('umow_wizyte');
-Route::post('/zapisz-wizyte', [UmowWizyteController::class, 'zapiszWizyte'])->name('zapiszWizyte');
+Route::get('/umow_wizyte', [umowWizyteController::class, 'wyswietlUslugi'])->name('umow_wizyte');
+Route::post('/umow_wizyte', [UmowWizyteController::class, 'wybierzUsluge'])->name('umow_wizyte');
+//Route::get('/calendar/{usluga}', [CalendarController::class, 'index'])->name('calendar');
+Route::get('/calendar/{usluga}/{pracownik}', [CalendarController::class, 'getTimeOptions'])->name('calendar');
+//::get('/calendar', [CalendarController::class, 'rezerwacja'])->name('calendar');
+//Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
+Route::post('/umow_wizyte', [UmowWizyteController::class, 'wybierzUsluge'])->name('umow_wizyte');
+//Route::get('/calendar/', [CalendarController::class, ''])->name('calendar');
