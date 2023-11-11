@@ -12,6 +12,6 @@
     "\\resources\\views\\layouts",
     "\\routes"
   ],
-  "SelectedNode": "\\app\\Http\\Controllers\\UmowWizyteController.php",
+  "SelectedNode": "\\resources\\views\\produkty.blade.php",
   "PreviewInSolutionExplorer": false
 }

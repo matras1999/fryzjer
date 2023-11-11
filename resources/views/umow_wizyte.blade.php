@@ -14,6 +14,7 @@
                             <div class="form-group">
                                 <label for="pracownik_{{ $usluga->id }}">Wybierz pracownika:</label>
                                 <select name="pracownik_{{ $usluga->id }}" id="pracownik_{{ $usluga->id }}" class="form-control">
+                                 
                                     @foreach($fryzjerzy as $fryzjer)
                                         <option value="{{ $fryzjer->id }}">{{ $fryzjer->imie }} {{ $fryzjer->nazwisko }}</option>
                                     @endforeach

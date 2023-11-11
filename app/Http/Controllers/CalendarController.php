@@ -20,14 +20,22 @@ class CalendarController extends Controller
    public function getTimeOptions(Request $request,$usluga,$pracownik)
     {
         $wybierzDate = $request->wybierzDate;
+
+        
         $selectedEmployeeId = $request->selectedEmployeeId;
        
         $uslugaGet = Usluga::find($pracownik);
 
         $startTime = Carbon::parse('08:00'); // Początkowy zakres czasowy
         $endTime = Carbon::parse('16:00'); // Końcowy zakres czasowy
-        $serviceDuration = $uslugaGet->czas_trwania; // Czas trwania usługi w minutach
 
+        //TODO
+        //if($pracownik = "dowolny"){
+            // pobrac wszystkich pracownikow ktorzy sa przypisani do $usluga
+       // }
+
+
+        $serviceDuration = $selectedEmployeeId == 0 ? 0 : $uslugaGet->czas_trwania;
         $timeOptions = [];
 
         $dostepnosci = Dostepnosc::all();

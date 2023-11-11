@@ -79,6 +79,7 @@
     //document.getElementById('displayedDate').textContent = chooseTime;
     $wybierzDate=info.dateStr;
     document.getElementById('displayedDate').textContent = $wybierzDate;
+    //getTimeOptions2($wybierzDate);
    
 
     // Możesz także przekazać wybraną datę do kontrolera lub innych operacji tutaj
