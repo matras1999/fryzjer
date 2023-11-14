@@ -51,5 +51,6 @@ Route::get('/calendar/{usluga}/{pracownik}', [CalendarController::class, 'getTim
 Route::post('/umow_wizyte', [UmowWizyteController::class, 'wybierzUsluge'])->name('umow_wizyte');
 //Route::get('/calendar/', [CalendarController::class, ''])->name('calendar');
 Route::post('/umow_wizyte', [UmowWizyteController::class, 'wybierzUsluge'])->name('umow_wizyte');
-
+Route::get('/time-options/{wybierzDate}', [CalendarController::class, 'timeOptions']);
+//Route::post('/rezerwacja', [CalendarController::class, 'rezerwacja']);
 
