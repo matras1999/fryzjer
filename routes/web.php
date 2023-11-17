@@ -31,11 +31,8 @@ Auth::routes();
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-//routes/web.php
-//Route::get('/umow_wizyte', [UmowWizyteController::class, 'umowWizyte'])->name('umow_wizyte');
 Route::get('/produkty', [ProduktyController::class, 'produkty'])->name('produkty');
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
-//Route::post('/umow_wizyte', [ReservationController::class, 'store']);
 Route::get('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 Route::post('/confirm', [ConfirmController::class, 'confirm'])->name('confirm');
 Route::match(['get', 'post'], '/send-sms', [SmsController::class, 'sendSms'])->name('send-sms');
@@ -44,13 +41,9 @@ Route::post('/upload-avatar', [ProfilController::class, 'uploadAvatar'])->name('
 Route::put('/update-profile', [ProfilController::class, 'updateProfile'])->name('update-profile');
 Route::get('/umow_wizyte', [umowWizyteController::class, 'wyswietlUslugi'])->name('umow_wizyte');
 Route::post('/umow_wizyte', [UmowWizyteController::class, 'wybierzUsluge'])->name('umow_wizyte');
-//Route::get('/calendar/{usluga}', [CalendarController::class, 'index'])->name('calendar');
 Route::get('/calendar/{usluga}/{pracownik}', [CalendarController::class, 'getTimeOptions'])->name('calendar');
-//::get('/calendar', [CalendarController::class, 'rezerwacja'])->name('calendar');
-//Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
 Route::post('/umow_wizyte', [UmowWizyteController::class, 'wybierzUsluge'])->name('umow_wizyte');
-//Route::get('/calendar/', [CalendarController::class, ''])->name('calendar');
 Route::post('/umow_wizyte', [UmowWizyteController::class, 'wybierzUsluge'])->name('umow_wizyte');
 Route::get('/time-options/{wybierzDate}', [CalendarController::class, 'timeOptions']);
-//Route::post('/rezerwacja', [CalendarController::class, 'rezerwacja']);
+Route::post('/zatwierdz', [CalendarController::class, 'zatwierdz'])->name('zatwierdz');
 

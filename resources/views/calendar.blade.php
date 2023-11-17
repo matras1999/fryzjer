@@ -62,7 +62,13 @@
     @endforeach
 </select>
             <p id="selectedTimeDisplay">Wybrana godzina:</p>
-            <button id="confirmTime" class="btn btn-primary">Zatwierdź</button>
+            <form action="{{ route('zatwierdz') }}" method="POST">
+    @csrf
+    <input type="hidden" name="selectedTime" id="selectedTimeInput">
+    <div>
+        <button id="confirmTime" type="submit" class="btn btn-primary">Zatwierdź</button>
+    </div>
+</form>
         </div>
     </div>
 
@@ -119,14 +125,18 @@
 
             calendar.render();
 
-          document.getElementById('freeTime').addEventListener('change', function() {
+         document.getElementById('freeTime').addEventListener('change', function() {
     var selectedTime = this.options[this.selectedIndex].text;
-    if (selectedTime !== "Wybierz godzinę") { // Sprawdź, czy wybrana opcja nie jest tekstem pustej opcji
+    if (selectedTime !== "Wybierz godzinę") {
         document.getElementById('selectedTimeDisplay').textContent = 'Wybrana godzina: ' + selectedTime;
+        // Aktualizuj wartość ukrytego pola formularza
+        document.getElementById('selectedTimeInput').value = selectedTime;
     } else {
         document.getElementById('selectedTimeDisplay').textContent = '';
+        document.getElementById('selectedTimeInput').value = '';
     }
 });
+
 
             document.getElementById('confirmTime').addEventListener('click', function() {
                 var selectedTime = document.getElementById('freeTime').value;

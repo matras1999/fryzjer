@@ -30,6 +30,7 @@ class CalendarController extends Controller
 
         $uslugaId = session('usluga');
         $pracownikId = session('pracownik');
+        session(['wybierzDate' => $wybierzDate]);
 
         $usluga = Usluga::find($uslugaId);
 
@@ -41,46 +42,130 @@ class CalendarController extends Controller
         // pobrac wszystkich pracownikow ktorzy sa przypisani do $usluga
         // }
 
-        $serviceDuration = $selectedEmployeeId == 0 ? 0 : $usluga->czas_trwania;
-        $timeOptions = [];
+        $serviceDuration = $usluga->czas_trwania;
         
+        $timeOptions = [];
+        if($pracownikId != 0){
         $dostepnosci = Dostepnosc::where('hairdresser_id', $pracownikId)
         ->where('date', $wybierzDate)
         ->get();
+        }else{
+        $dostepnosci = Dostepnosc::where('date', $wybierzDate)
+        ->get();
+        }
+        //zapisz do sesji dostepnosci
 
-        foreach ($dostepnosci as $dostepnosc) {
+         foreach ($dostepnosci as $dostepnosc) {
             $dostepnoscStart = Carbon::parse($dostepnosc->start_time);
             $dostepnoscEnd = Carbon::parse($dostepnosc->end_time);
-        
-            $period = CarbonPeriod::create($dostepnoscStart, '30 minutes', $dostepnoscEnd);
-        
-            foreach ($period as $czas) {
-                $czas->setDate(2000, 1, 1); // Ustawienie arbitralnej daty (w tym przypadku 2000-01-01)
-                
-                if ($czas->copy()->addMinutes($serviceDuration) > $dostepnoscEnd) {
-                    break;
-                } else {
-                    $formattedTime = $czas->format('H:i'); // Formatowanie tylko godzin i minut
-                    if (!in_array($formattedTime, $timeOptions)) {
-                        $timeOptions[] = $formattedTime;
+
+            for ($hour = $dostepnoscStart->hour; $hour <= $dostepnoscEnd->hour; $hour++) {
+                for ($minute = ceil($dostepnoscStart->minute / 30) * 30; $minute < 60; $minute += 30) {
+                    $czas = $dostepnoscStart->copy()->setHour($hour)->setMinute($minute);
+                    if ($czas->copy()->addMinutes($serviceDuration) > $dostepnoscEnd) {
+                        break;
+                    } else {
+                        $znaleziono = false;
+                        foreach ($timeOptions as $czasWliscie) {
+                            if ($czasWliscie->equalTo($czas)) {
+                                $znaleziono = true;
+                                break;
+                            }
+                        }
+                        if (!$znaleziono) {
+                        array_push($timeOptions, $czas);
+                        }
                     }
                 }
             }
         }
 
-        return Response::json(['timeOptions' => $timeOptions]);
+        $timeArray = [];
+    foreach ($timeOptions as $date) {
+        $carbonDate = new Carbon($date);
+        $timeArray[] = $carbonDate->format('H:i');
     }
 
-    public function rezerwacja(Request $request)
-    {
-
-        $reservation = new Reservation();
-        $reservation->data = $request->data; // Przyjmij, że dane są przesyłane w formularzu
-        $reservation->godzina = $request->time; // Wybrane godzina
-        $reservation->fryzjer_id = $request->employee; // Wybrany pracownik (fryzjer)
-        $reservation->save();
-
-
-        return redirect()->back()->with('success', 'Wizyta została zarezerwowana.');
+        return Response::json(['timeOptions' => $timeArray]);
     }
+
+
+    public function zatwierdz(Request $request) {
+    $selectedTime = $request->input('selectedTime'); // Pobieranie danych z requestu
+    $uslugaId = session('usluga');
+    $pracownikId = session('pracownik');
+    $wybierzDate = session('wybierzDate');
+
+    $usluga = Usluga::find($uslugaId);
+
+    // Konwersja stringa na instancję Carbon
+$selectedTimeCarbon = Carbon::parse($selectedTime);
+
+
+
+    $reservation = new Reservation();
+    $reservation->data = $wybierzDate; // Przyjmij, że dane są przesyłane w formularzu
+    $reservation->godzina_od = $selectedTime; // Wybrane godzina
+    // Dodanie minut do skopiowanego obiektu Carbon
+$reservation->godzina_do = $selectedTimeCarbon->copy()->addMinutes($usluga->czas_trwania);
+    $reservation->fryzjer_id = $pracownikId; // Wybrany pracownik (fryzjer)
+    $reservation->usluga_id = $uslugaId;
+    $reservation->save();
+
+
+    $startTime = $selectedTime;
+    $endTime = $selectedTimeCarbon->copy()->addMinutes($usluga->czas_trwania);
+    // druga tabela logika najwazniejsze
+    if($pracownikId != 0){
+    $dostepnosc = Dostepnosc::where('hairdresser_id', $pracownikId)
+    ->where('date', $wybierzDate)
+    ->where('start_time', '<=', $startTime)
+    ->where('end_time', '>=', $endTime)
+    ->first();
+    }else{
+     $dostepnosc = Dostepnosc::where('date', $wybierzDate)
+    ->where('start_time', '<=', $startTime)
+    ->where('end_time', '>=', $endTime)
+    ->first();
+    }
+
+    $noweDostepnosci = [];
+            $dostepnosc1 = new Dostepnosc; // lub klonuj $dostepnosc, jeśli to konieczne
+                    $dostepnosc2 = new Dostepnosc; // lub klonuj $dostepnosc, jeśli to konieczne
+
+
+    function splitDostepnosc($dostepnosc, $reservedStartTime, $reservedEndTime, $wybierzDate,$noweDostepnosci,$dostepnosc1,$dostepnosc2) {
+    
+    // Sprawdź pierwszy przedział czasowy
+    $dostepnosc1StartTime = Carbon::parse($dostepnosc->start_time);
+    $dostepnosc1EndTime = Carbon::parse($reservedStartTime);
+    if ($dostepnosc1EndTime->diffInMinutes($dostepnosc1StartTime) >= 30) {
+        $dostepnosc1->start_time = $dostepnosc1StartTime->format('H:i');
+        $dostepnosc1->end_time = $dostepnosc1EndTime->format('H:i');
+        $dostepnosc1->date = $wybierzDate;
+        $dostepnosc1->hairdresser_id = $dostepnosc->hairdresser_id;
+        $dostepnosc1->save();
+    }
+
+    // Sprawdź drugi przedział czasowy
+    $dostepnosc2StartTime = Carbon::parse($reservedEndTime);
+    $dostepnosc2EndTime = Carbon::parse($dostepnosc->end_time);
+    if ($dostepnosc2EndTime->diffInMinutes($dostepnosc2StartTime) >= 30) {
+        $dostepnosc2->start_time = $dostepnosc2StartTime->format('H:i');
+        $dostepnosc2->end_time = $dostepnosc2EndTime->format('H:i');
+        $dostepnosc2->date = $wybierzDate;
+        $dostepnosc2->hairdresser_id = $dostepnosc->hairdresser_id;
+                $dostepnosc2->save();
+    }
+
+}
+
+  splitDostepnosc($dostepnosc, $startTime, $endTime, $wybierzDate, $noweDostepnosci,$dostepnosc1,$dostepnosc2);
+  $dostepnosc->delete();
+
+
+
+    return view('zatwierdz', ['selectedTime' => $selectedTime]); // Przekazywanie do widoku
+    }
+
 }
