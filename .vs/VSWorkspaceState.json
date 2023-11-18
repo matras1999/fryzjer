@@ -2,15 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\app",
-    "\\app\\Models",
-    "\\database",
-    "\\database\\migrations",
+    "\\app\\Enums",
+    "\\app\\Http",
+    "\\app\\Http\\Controllers",
+    "\\app\\Http\\Controllers\\Auth",
     "\\resources",
-    "\\resources\\css",
     "\\resources\\views",
     "\\resources\\views\\layouts",
-    "\\routes"
+    "\\resources\\views\\layouts\\admin"
   ],
-  "SelectedNode": "\\app\\Models\\Dostepnosc.php",
+  "SelectedNode": "\\app\\Models\\Usluga.php",
   "PreviewInSolutionExplorer": false
 }

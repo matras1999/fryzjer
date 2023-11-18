@@ -101,20 +101,12 @@ class CalendarController extends Controller
     // Konwersja stringa na instancję Carbon
 $selectedTimeCarbon = Carbon::parse($selectedTime);
 
-
-
-    $reservation = new Reservation();
-    $reservation->data = $wybierzDate; // Przyjmij, że dane są przesyłane w formularzu
-    $reservation->godzina_od = $selectedTime; // Wybrane godzina
-    // Dodanie minut do skopiowanego obiektu Carbon
-$reservation->godzina_do = $selectedTimeCarbon->copy()->addMinutes($usluga->czas_trwania);
-    $reservation->fryzjer_id = $pracownikId; // Wybrany pracownik (fryzjer)
-    $reservation->usluga_id = $uslugaId;
-    $reservation->save();
-
-
     $startTime = $selectedTime;
     $endTime = $selectedTimeCarbon->copy()->addMinutes($usluga->czas_trwania);
+
+
+
+   
     // druga tabela logika najwazniejsze
     if($pracownikId != 0){
     $dostepnosc = Dostepnosc::where('hairdresser_id', $pracownikId)
@@ -128,6 +120,17 @@ $reservation->godzina_do = $selectedTimeCarbon->copy()->addMinutes($usluga->czas
     ->where('end_time', '>=', $endTime)
     ->first();
     }
+
+        $reservation = new Reservation();
+    $reservation->data = $wybierzDate; // Przyjmij, że dane są przesyłane w formularzu
+    $reservation->godzina_od = $selectedTime; // Wybrane godzina
+    // Dodanie minut do skopiowanego obiektu Carbon
+$reservation->godzina_do = $endTime->format('H:i');
+    $reservation->fryzjer_id = $dostepnosc->hairdresser_id; // Wybrany pracownik (fryzjer)
+    $reservation->usluga_id = $uslugaId;
+    $reservation->created_at = now();
+    $reservation->save();
+
 
     $noweDostepnosci = [];
             $dostepnosc1 = new Dostepnosc; // lub klonuj $dostepnosc, jeśli to konieczne
