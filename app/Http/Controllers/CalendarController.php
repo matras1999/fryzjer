@@ -168,7 +168,8 @@ $reservation->godzina_do = $endTime->format('H:i');
 
 
 
-    return view('zatwierdz', ['selectedTime' => $selectedTime]); // Przekazywanie do widoku
+    return redirect()->action([ZatwierdzController::class, 'showConfirmations']);
+
     }
 
 }

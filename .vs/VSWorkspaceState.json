@@ -2,15 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\app",
-    "\\app\\Enums",
     "\\app\\Http",
     "\\app\\Http\\Controllers",
-    "\\app\\Http\\Controllers\\Auth",
+    "\\app\\Models",
+    "\\database",
+    "\\database\\migrations",
     "\\resources",
     "\\resources\\views",
-    "\\resources\\views\\layouts",
-    "\\resources\\views\\layouts\\admin"
+    "\\resources\\views\\layouts"
   ],
-  "SelectedNode": "\\app\\Models\\Usluga.php",
+  "SelectedNode": "\\resources\\views\\calendar.blade.php",
   "PreviewInSolutionExplorer": false
 }

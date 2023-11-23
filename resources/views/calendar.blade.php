@@ -74,17 +74,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var timePickerEl = document.getElementById('time-picker');
+  var calendarEl = document.getElementById('calendar');
+  var today = new Date();// Ustaw dzisiejszą datę w formacie 'YYYY-MM-DD'
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                selectable: true,
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialDate: today,
+    firstDay: today.getDay(), 
+    selectable: true,
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
 
+    validRange: {
+      start: today, // Ustawia zakres na dzisiejszy dzień jako start
+    },
                 dateClick: function(info) {
                     var selectedDate = info.dateStr;
                     document.getElementById('displayedDate').textContent = selectedDate;

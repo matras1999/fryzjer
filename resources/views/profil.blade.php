@@ -57,7 +57,9 @@
 <!-- Przycisk "Edytuj dane" -->
 <button id="editProfile" class="btn btn-primary">Edytuj dane</button>
 <!-- Przycisk "Moje Rezerwacje" -->
-        <a href="{{ route('confirm') }}" class="btn btn-success mt-3">Moje Rezerwacje</a>
+        <a href="{{ route('zatwierdz') }}" class="btn btn-success mt-3">Moje Rezerwacje</a>
+
+
 
                 </div>
             </div>

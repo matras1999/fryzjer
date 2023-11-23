@@ -38,12 +38,19 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    protected function redirectTo()
+   protected function redirectTo()
 {
-    if (auth()->user()->role == 'admin') {
+    $user = auth()->user();
+
+    if ($user->role == 'admin1') {
+        return '/admin1/dashboard';
+    } elseif ($user->role == 'admin2') {
+        return '/admin2/dashboard';
+    } elseif ($user->role == 'admin') {
         return '/admin/dashboard';
     }
 
     return '/home';
 }
+
 }

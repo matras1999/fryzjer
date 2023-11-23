@@ -111,10 +111,9 @@
             <div class="sidebar-heading">Panel Administracyjny</div>
             <h5 class="mt-2" style="padding-left: 20px;">Witaj, {{ Auth::user()->name }}</h5>
             <div class="list-group list-group-flush">
-                <a href="{{ route('admin.zarzadzaj-grafikami') }}" class="list-group-item list-group-item-action">Zarządzaj grafikami</a>
-                <a href="{{ route('admin.zarzadzaj-sklepem') }}" class="list-group-item list-group-item-action">Zarządzaj sklepem</a>
-                <a href="#" class="list-group-item list-group-item-action">Mój grafik</a>
-                <a href="#" class="list-group-item list-group-item-action">Lista klientów</a>
+                
+                <a href="{{ route('admin2.pokaz-grafik') }}" class="list-group-item list-group-item-action">Mój grafik</a>
+                
                 <a href="#" class="list-group-item list-group-item-action">Powiadomienia</a>
                 
                 <!-- Dodaj więcej linków według potrzeb -->
@@ -124,7 +123,7 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
     <div class="container-fluid">
-        <h4 class="mt-2">Mój kalendarz:</h4>
+        <h4 class="mt-2">Mój kalendarz wizyt:</h4>
         <div id='calendar'></div> <!-- Kontener na kalendarz -->
     </div>
 </div>    
@@ -149,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
       right: 'timeGridWeek,timeGridDay'
     },
     allDaySlot: false, // To wyłącza pasmo "all-day"
-    events: '/admin/reservations', // Endpoint API z wydarzeniami
+    events: '/admin1/reservations', // Endpoint API z wydarzeniami
     eventContent: function(arg) { // Niestandardowe renderowanie treści wydarzenia
       let contentEl = document.createElement('div');
       contentEl.innerHTML = arg.event.title;
