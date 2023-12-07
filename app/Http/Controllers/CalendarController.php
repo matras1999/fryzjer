@@ -116,9 +116,14 @@ $selectedTimeCarbon = Carbon::parse($selectedTime);
     ->first();
     }else{
      $dostepnosc = Dostepnosc::where('date', $wybierzDate)
-    ->where('start_time', '<=', $startTime)
-    ->where('end_time', '>=', $endTime)
-    ->first();
+        ->where('start_time', '<=', $startTime)
+        ->where('end_time', '>=', $endTime)
+        ->whereIn('hairdresser_id', function ($query) use ($usluga) {
+            $query->select('fryzjer_id')
+                ->from('usluga_fryzjer')
+                ->where('usluga_id', $usluga->id);
+        })
+        ->first();
     }
 
         $reservation = new Reservation();

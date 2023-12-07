@@ -10,7 +10,8 @@ class ProduktyController extends Controller
     public function produkty()
     {
         // Pobieranie produktów z bazy danych
-        $produkty = Produkt::all(); 
+         
+        $produkty = Produkt::paginate(8); // 10 produktów na stronę
 
         // Przekazywanie produktów do widoku
         return view('produkty', ['produkty' => $produkty]);

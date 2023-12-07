@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usluga extends Model
 {
-    protected $table = 'uslugi'; // Ustaw nazwę tabeli na "uslugi"
-    // Pozostałe właściwości modelu
-}
+    use HasFactory;
 
+    protected $table = 'uslugi';
+
+      public function fryzjerzy()
+    {
+        return $this->belongsToMany(Fryzjer::class, 'usluga_fryzjer', 'usluga_id', 'fryzjer_id');
+    }
+}

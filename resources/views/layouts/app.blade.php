@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('Migda', 'Migda') }}</title>
+    <title>{{ config('Matras', 'Matras') }}</title>
 
     <!-- Fonts -->
     
@@ -43,7 +43,8 @@
 
 <ul class="navbar-nav me-auto">
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('welcome') }}" style="font-size: 18px; font-weight: bold; color: #fff;">Migda Hair</a>
+        <a class="nav-link" href="{{ route('welcome') }}" style="font-size: 18px; font-weight: bold; color: #fff;">Matras Hair</a>
+
     </li>
 </ul>
 
@@ -51,16 +52,16 @@
     <!-- Authentication Links -->
     @guest
         @if (Route::has('login'))
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-            </li>
-        @endif
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('login') }}" style="color: #fff;">{{ __('Logowanie') }}</a>
+    </li>
+@endif
 
-        @if (Route::has('register'))
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-            </li>
-        @endif
+@if (Route::has('register'))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('register') }}" style="color: #fff;">{{ __('Rejestracja') }}</a>
+    </li>
+@endif
     @else
         <li class="nav-item dropdown">
     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #fff;">
@@ -70,10 +71,11 @@
     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
         @can('isUser')
             <a class="dropdown-item" href="{{ route('profil') }}">Profil użytkownika</a>
+            <a class="dropdown-item" href="{{ route('koszyk') }}">Koszyk</a>
         @endcan
         <a class="dropdown-item" href="{{ route('logout') }}"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            {{ __('Logout') }}
+            {{ __('Wyloguj') }}
         </a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf

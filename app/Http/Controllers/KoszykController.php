@@ -60,5 +60,7 @@ public function pokazKoszyk()
     // Przekazanie danych do widoku
     return view('koszyk', ['cartItems' => $cartItems, 'totalPrice' => $totalPrice]);
 }
+
+
 }
 

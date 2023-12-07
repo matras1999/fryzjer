@@ -4,13 +4,13 @@
     "\\app",
     "\\app\\Http",
     "\\app\\Http\\Controllers",
+    "\\app\\Mail",
     "\\app\\Models",
-    "\\database",
-    "\\database\\migrations",
     "\\resources",
     "\\resources\\views",
-    "\\resources\\views\\layouts"
+    "\\resources\\views\\emails",
+    "\\routes"
   ],
-  "SelectedNode": "\\resources\\views\\calendar.blade.php",
+  "SelectedNode": "\\app\\Models\\Produkt.php",
   "PreviewInSolutionExplorer": false
 }

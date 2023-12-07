@@ -12,6 +12,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ZatwierdzController;
 use App\Http\Controllers\Admin2Controller;
 use App\Http\Controllers\Admin3Controller;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\KoszykController;
 
 /*
@@ -33,7 +34,9 @@ Auth::routes();
 
 
 
-
+Route::get('/kadra', function () {
+    return view('kadra');
+});
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/produkty', [ProduktyController::class, 'produkty'])->name('produkty');
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
@@ -53,7 +56,11 @@ Route::post('/zatwierdz', [CalendarController::class, 'zatwierdz'])->name('zatwi
 Route::get('/produkty/obrazek/{id}', [ProduktyController::class, 'showImage'])->name('produkty.showImage');
 Route::post('/przejdz-do-podsumowania', [KoszykController::class, 'przejdzDoPodsumowania'])->name('/przejdz-do-podsumowania');
 Route::get('/koszyk',[KoszykController::class, 'pokazKoszyk'])->name('koszyk');
-//Route::post('/przejdz-do-podsumowania', [ProduktyController::class, 'przejdzDoPodsumowania'])->name('przejdz-do-podsumowania');
+
+
+
+Route::post('/confirm-order', [OrderController::class, 'confirmOrder'])->name('confirmOrder');
+
 
 //admin1
 Route::middleware(['can:isAdmin'])->group(function () {

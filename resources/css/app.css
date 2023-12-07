@@ -1,18 +1,8 @@
 /* Styl paska nawigacji */
 .navbar {
-    background-color: black; /* Kolor tła paska */
+  margin-bottom: 0 !important; /* Usuwa margines poniżej paska nawigacji */
 }
 
-    .navbar a.navbar-brand {
-        color: #fff; /* Kolor tekstu dla marki */
-        font-weight: bold;
-    }
-
-    .navbar a.nav-link {
-        color: #fff; /* Kolor tekstu dla linków nawigacji */
-    }
-
-        /* Styl dla aktywnego linku */
-        .navbar a.nav-link.active {
-            color: #f00; /* Kolor tekstu dla aktywnego linku */
-        }
+#app {
+  margin-top: 0 !important; /* Usuwa margines na górze elementu #app */
+}
