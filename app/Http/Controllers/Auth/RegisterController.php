@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\SmsController;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -63,12 +65,28 @@ class RegisterController extends Controller
      * @return \App\Models\User
      */
     protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'phone' => $data['phone'],
-        ]);
-    }
+{
+    // Dodajemy +48 do numeru telefonu, jeśli jeszcze nie ma tego prefiksu
+     $phone_number = '+48' . $data['phone'];
+    
+    // Utwórz użytkownika z dodanym prefiksem do numeru telefonu
+    $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'phone' => $phone_number,
+    ]);
+
+    // Następnie wysyłamy SMS
+    $sms_body = "Witaj w salonie fryzjerskim Matras Hair. Zapraszamy do skorzystania z naszych usług. Więcej na www.matrashair.pl";
+
+    // Zauważ, że nie musimy tworzyć nowego Request, możemy po prostu przekazać dane bezpośrednio do metody
+    $smsController = new SmsController();
+    $smsController->sendSms(new Request(['phone' => $phone_number, 'body' => $sms_body]));
+
+
+    // Na końcu zwracamy utworzonego użytkownika
+    return $user;
+}
+
 }

@@ -11,20 +11,28 @@ class SmsController extends Controller
     {
         $sid = env('TWILIO_SID');
         $token = env('TWILIO_TOKEN');
-        $twilio_number = env('TWILIO_FROM');
+        $twilio_number = '+12296000161';
 
        
-        $client = new Client($sid, $token);
+     try {
+            // Tworzenie klienta Twilio
+            $client = new Client($sid, $token);
 
+            // Wysyłanie wiadomości
+            $message = $client->messages->create(
+                $request->input('phone'), // Numer telefonu odbiorcy
+                [
+                    'from' => $twilio_number, // Twój numer Twilio
+                    'body' => $request->input('body') // Treść wiadomości SMS
+                ]
+            );
 
-        $message = $client->messages->create(
-            '+48790235497', // Numer odbiorcy, na który chcesz wysłać SMS
-            [
-                'from' => $twilio_number,
-                'body' => 'Witaj, to jest testowa wiadomość z Laravel!'
-            ]
-        );
-        
-        return $message->sid;
+            // Zwróć identyfikator wiadomości jako potwierdzenie wysłania
+            return $message->sid;
+        } catch (\Exception $e) {
+            // Logowanie błędów i odpowiednia obsługa
+            \Log::error("Error sending SMS: " . $e->getMessage());
+            return response()->json(['error' => 'SMS could not be sent.'], 500);
+        }
     }
 }
