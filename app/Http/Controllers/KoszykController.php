@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 class KoszykController extends Controller
 {
 
@@ -23,6 +24,7 @@ public function hej()
 
 public function przejdzDoPodsumowania(Request $request)
 {
+    
     // Pierwszy poziom 'cartItems'
     $cartItems = $request->input('cartItems.cartItems'); 
 
@@ -60,6 +62,15 @@ public function pokazKoszyk()
     // Przekazanie danych do widoku
     return view('koszyk', ['cartItems' => $cartItems, 'totalPrice' => $totalPrice]);
 }
+ public function usunWszystkieProdukty(Request $request)
+    {
+        
+        // Usuń wszystkie produkty z sesji
+        Session::forget('cartItems');
+        
+        // Przekieruj użytkownika z powrotem do koszyka lub innej strony
+        return redirect()->route('koszyk')->with('success', 'Wszystkie produkty zostały usunięte z koszyka.');
+    }
 
 
 }

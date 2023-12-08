@@ -51,18 +51,21 @@ public function zapiszGrafik(Request $request)
     ]);
 
     $dates = [];
-    foreach ($validatedData['daty'] as $dataString) {
-        $dates = array_merge($dates, explode(',', $dataString));
+foreach ($validatedData['daty'] as $dataString) {
+    $datesArray = explode(',', $dataString);
+    foreach ($datesArray as $date) {
+        $dates[] = $date; // Dodajemy datę na koniec tablicy $dates
     }
-
-    foreach ($dates as $data) {
+}
+     foreach ($dates as $data) {
         Dostepnosc::create([
             'hairdresser_id' => $validatedData['fryzjer_id'],
             'date' => $data,
             'start_time' => $validatedData['godzina_od'],
             'end_time' => $validatedData['godzina_do'],
         ]);
-    }
+}
+
 
     return redirect()->back()->with('success', 'Grafik zapisany pomyślnie.');
 }

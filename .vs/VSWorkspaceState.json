@@ -2,15 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\app",
-    "\\app\\Http",
-    "\\app\\Http\\Controllers",
     "\\app\\Mail",
     "\\app\\Models",
     "\\resources",
     "\\resources\\views",
     "\\resources\\views\\emails",
+    "\\resources\\views\\layouts",
+    "\\resources\\views\\layouts\\admin",
     "\\routes"
   ],
-  "SelectedNode": "\\app\\Models\\Produkt.php",
+  "SelectedNode": "\\resources\\views\\layouts\\admin\\ustaw_grafik.blade.php",
   "PreviewInSolutionExplorer": false
 }

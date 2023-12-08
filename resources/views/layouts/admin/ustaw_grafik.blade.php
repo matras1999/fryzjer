@@ -71,20 +71,30 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('#data').datepicker({
-                format: 'yyyy-mm-dd',
-                multidate: true,
-                startDate: '-0d',
-                autoclose: false
-            }).on('changeDate', function(e){
-                $('.dates').remove(); // Usuń wszystkie poprzednie ukryte pola
-                $(e.dates).each(function(index, date){
-                    $('#data').after('<input type="hidden" class="dates" name="daty[]" value="' + date.toISOString().slice(0,10) + '">');
+   <script>
+    $(document).ready(function(){
+        $('#data').datepicker({
+            format: 'yyyy-mm-dd',
+            multidate: true,
+            startDate: '-0d',
+            autoclose: false
+        }).on('changeDate', function(e){
+            $('.dates').remove(); // Usuń wszystkie poprzednie ukryte pola
+
+            if (e.dates.length > 0) {
+                // Utwórz tablicę dat z indeksu 0
+                var datesArray = e.dates[0].split(',');
+                $(datesArray).each(function(index, date){
+                    var firstDate = datesArray[0];
+                    $('#data').after('<input type="hidden" class="dates" name="daty[]" value="' + date.trim() + '">');
                 });
-            });
+            }
         });
-    </script>
+    });
+</script>
+
+
+
+
 </body>
 </html>

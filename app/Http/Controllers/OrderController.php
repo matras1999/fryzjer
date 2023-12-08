@@ -9,22 +9,28 @@ use App\Mail\OrderConfirmation;
 
 class OrderController extends Controller
 {
-    public function confirmOrder(Request $request)
-    {
-        // Pobierz zalogowanego użytkownika
-        $user = auth()->user();
+   public function confirmOrder(Request $request)
+{
+    $user = auth()->user();
+    $cartItems = $request->input('items');
 
-        // Pobierz dane o zamówieniu z formularza
-        $cartItems = $request->input('items'); // Zakładam, że dane są przekazywane w formie tablicy
-
-        // Wyślij e-mail potwierdzający zamówienie
-        Mail::to($user->email)->send(new OrderConfirmation($user, $cartItems));
-        session(['cartItems' => []]);
-        // Dodatkowa logika, np. zapis zamówienia do bazy danych
-        // ...
-        $message = 'E-mail z potwierdzeniem został wysłany.';
-
-        // Zwróć odpowiedź JSON
-        return view('pomoc');
+    $total = 0;
+    foreach ($cartItems as $item) {
+        $total += (int) $item['quantity'] * (float) $item['price'];
     }
+
+    // Teraz $total zawiera prawidłową całkowitą kwotę
+    // Wyślij e-mail potwierdzający zamówienie
+    Mail::to($user->email)->send(new OrderConfirmation($user, $cartItems, $total));
+
+    session(['cartItems' => []]);
+
+    // Dodatkowa logika
+    // ...
+    $message = 'E-mail z potwierdzeniem został wysłany.';
+
+    return view('pomoc');
+}
+
+
 }

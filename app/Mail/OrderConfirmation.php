@@ -13,23 +13,20 @@ class OrderConfirmation extends Mailable
     public $user;
     public $cartItems;
 
-    public function __construct($user, $cartItems)
-    {
-        $this->user = $user;
-        $this->cartItems = $cartItems;
-    }
-
-    public function build()
+    public function __construct($user, $cartItems, $total)
 {
-    $total = 0;
-    foreach ($this->cartItems as $item) {
-        $total += $item['price'] * $item['quantity'];
-    }
+    $this->user = $user;
+    $this->cartItems = $cartItems;
+    $this->total = $total;
+}
 
+public function build()
+{
     return $this->view('emails.orderconfirmation')
                 ->with([
+                    'user' => $this->user,
                     'cartItems' => $this->cartItems,
-                    'total' => $total,
+                    'total' => $this->total
                 ]);
 }
 

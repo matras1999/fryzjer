@@ -56,6 +56,7 @@ Route::post('/zatwierdz', [CalendarController::class, 'zatwierdz'])->name('zatwi
 Route::get('/produkty/obrazek/{id}', [ProduktyController::class, 'showImage'])->name('produkty.showImage');
 Route::post('/przejdz-do-podsumowania', [KoszykController::class, 'przejdzDoPodsumowania'])->name('/przejdz-do-podsumowania');
 Route::get('/koszyk',[KoszykController::class, 'pokazKoszyk'])->name('koszyk');
+Route::post('/usunWszystkieProdukty',[KoszykController::class, 'usunWszystkieProdukty'])->name('usunWszystkieProdukty');
 
 
 
