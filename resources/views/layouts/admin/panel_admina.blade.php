@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administracyjny - MigdaHair</title>
+    <title>Panel Administracyjny - MatrasHair</title>
     <!-- Dodaj Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -79,7 +79,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">MigdaHair</a>
+        <a class="navbar-brand" href="#">MatrasHair</a>
         <ul class="navbar-nav ml-auto">
             @guest
                 <!-- Linki logowania i rejestracji -->
@@ -113,8 +113,10 @@
             <div class="list-group list-group-flush">
                 <a href="{{ route('admin.zarzadzaj-grafikami') }}" class="list-group-item list-group-item-action">Zarządzaj grafikami</a>
                 <a href="{{ route('admin.zarzadzaj-sklepem') }}" class="list-group-item list-group-item-action">Zarządzaj sklepem</a>
-                <a href="#" class="list-group-item list-group-item-action">Mój grafik</a>
-                <a href="#" class="list-group-item list-group-item-action">Lista klientów</a>
+                <a href="{{ route('grafik-fryzjera') }}" class="list-group-item list-group-item-action">Mój grafik</a>
+                <a href="{{ route('lista-klientow') }}" class="list-group-item list-group-item-action">Lista klientów</a>
+
+                
                 <a href="#" class="list-group-item list-group-item-action">Powiadomienia</a>
                 
                 <!-- Dodaj więcej linków według potrzeb -->

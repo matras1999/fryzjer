@@ -24,71 +24,60 @@ class CalendarController extends Controller
     }
 
     public function timeOptions(Request $request, $wybierzDate)
-    {
+{
+    $uslugaId = session('usluga');
+    $pracownikId = session('pracownik');
+    session(['wybierzDate' => $wybierzDate]);
 
-        $selectedEmployeeId = 1;
+    $usluga = Usluga::find($uslugaId);
+    $serviceDuration = $usluga->czas_trwania;
 
-        $uslugaId = session('usluga');
-        $pracownikId = session('pracownik');
-        session(['wybierzDate' => $wybierzDate]);
-
-        $usluga = Usluga::find($uslugaId);
-
-        $startTime = Carbon::parse('08:00'); // Początkowy zakres czasowy
-        $endTime = Carbon::parse('16:00'); // Końcowy zakres czasowy
-
-        //TODO
-        //if($pracownik = "dowolny"){
-        // pobrac wszystkich pracownikow ktorzy sa przypisani do $usluga
-        // }
-
-        $serviceDuration = $usluga->czas_trwania;
-        
-        $timeOptions = [];
-        if($pracownikId != 0){
+    if ($pracownikId != 0) {
         $dostepnosci = Dostepnosc::where('hairdresser_id', $pracownikId)
-        ->where('date', $wybierzDate)
-        ->get();
-        }else{
+                                 ->where('date', $wybierzDate)
+                                 ->get();
+    } else {
+        $fryzjerIds = $usluga->fryzjerzy()->pluck('fryzjer_id');
         $dostepnosci = Dostepnosc::where('date', $wybierzDate)
-        ->get();
-        }
-        //zapisz do sesji dostepnosci
+                                 ->whereIn('hairdresser_id', $fryzjerIds)
+                                 ->get();
+    }
 
-         foreach ($dostepnosci as $dostepnosc) {
-            $dostepnoscStart = Carbon::parse($dostepnosc->start_time);
-            $dostepnoscEnd = Carbon::parse($dostepnosc->end_time);
+    $timeOptions = [];
 
-            for ($hour = $dostepnoscStart->hour; $hour <= $dostepnoscEnd->hour; $hour++) {
-                for ($minute = ceil($dostepnoscStart->minute / 30) * 30; $minute < 60; $minute += 30) {
-                    $czas = $dostepnoscStart->copy()->setHour($hour)->setMinute($minute);
-                    if ($czas->copy()->addMinutes($serviceDuration) > $dostepnoscEnd) {
-                        break;
-                    } else {
-                        $znaleziono = false;
-                        foreach ($timeOptions as $czasWliscie) {
-                            if ($czasWliscie->equalTo($czas)) {
-                                $znaleziono = true;
-                                break;
-                            }
+    foreach ($dostepnosci as $dostepnosc) {
+        $dostepnoscStart = Carbon::parse($dostepnosc->start_time);
+        $dostepnoscEnd = Carbon::parse($dostepnosc->end_time);
+
+        for ($hour = $dostepnoscStart->hour; $hour <= $dostepnoscEnd->hour; $hour++) {
+            for ($minute = ceil($dostepnoscStart->minute / 30) * 30; $minute < 60; $minute += 30) {
+                $czas = $dostepnoscStart->copy()->setHour($hour)->setMinute($minute);
+                if ($czas->copy()->addMinutes($serviceDuration) > $dostepnoscEnd) {
+                    break;
+                } else {
+                    $znaleziono = false;
+                    foreach ($timeOptions as $czasWliscie) {
+                        if ($czasWliscie->equalTo($czas)) {
+                            $znaleziono = true;
+                            break;
                         }
-                        if (!$znaleziono) {
+                    }
+                    if (!$znaleziono) {
                         array_push($timeOptions, $czas);
-                        }
                     }
                 }
             }
         }
+    }
 
-        $timeArray = [];
+    $timeArray = [];
     foreach ($timeOptions as $date) {
         $carbonDate = new Carbon($date);
         $timeArray[] = $carbonDate->format('H:i');
     }
 
-        return Response::json(['timeOptions' => $timeArray]);
-    }
-
+    return Response::json(['timeOptions' => $timeArray]);
+}
 
     public function zatwierdz(Request $request) {
     $selectedTime = $request->input('selectedTime'); // Pobieranie danych z requestu

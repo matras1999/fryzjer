@@ -71,6 +71,13 @@ Route::middleware(['can:isAdmin'])->group(function () {
     Route::post('/admin/zapisz-grafik', [AdminController::class, 'zapiszGrafik'])->name('admin.zapisz-grafik');
     Route::get('/admin/zarzadzaj-sklepem', [AdminController::class, 'zarzadzajSklepem'])->name('admin.zarzadzaj-sklepem');
     Route::post('/admin/dodaj-produkt', [AdminController::class, 'dodajProdukt'])->name('admin.dodaj-produkt');
+    Route::get('/admin/products', [AdminController::class, 'showProducts'])->name('admin.products');
+    Route::post('/admin/products/update/{id}', [AdminController::class, 'updateProduct'])->name('admin.updateProduct');
+    Route::delete('/admin/delete/{produkt}', [AdminController::class, 'delete'])->name('admin.delete');
+    Route::get('/grafik-fryzjera', [AdminController::class, 'showSchedule'])->name('grafik-fryzjera');
+    Route::get('/admin/lista-klientow', [AdminController::class, 'showClients'])->name('lista-klientow');
+    Route::delete('/admin/usun-klienta/{id}', [AdminController::class, 'destroy'])->name('usun-klienta');
+
 
 
 });

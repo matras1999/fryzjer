@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Fryzjer;
 use App\Models\Dostepnosc;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+
 class AdminController extends Controller
 {
     public function dashboard()
@@ -69,9 +72,16 @@ foreach ($validatedData['daty'] as $dataString) {
 
     return redirect()->back()->with('success', 'Grafik zapisany pomyślnie.');
 }
+
 public function zarzadzajSklepem()
 {
-    return view('layouts.admin.tymczasowy');
+    $produkty = Produkt::all(); // Pobiera wszystkie produkty z bazy danych
+    return view('layouts.admin.tymczasowy', compact('produkty'));
+}
+public function showProducts()
+{
+    $produkty = Produkt::all(); // Pobiera wszystkie produkty z bazy danych
+    return view('layouts.admin.tymczasowy', compact('produkty'));
 }
 
 public function dodajProdukt(Request $request)
@@ -94,5 +104,68 @@ public function dodajProdukt(Request $request)
 
     return back()->with('success', 'Produkt został dodany.');
 }
+public function updateProduct(Request $request, $id)
+    {
+        $produkt = Produkt::findOrFail($id);
+        // Walidacja danych wejściowych
+        $validator = Validator::make($request->all(), [
+            'nazwa' => 'required|string|max:255',
+            'opis' => 'required|string',
+            'cena' => 'required|numeric',
+        ]);
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Znajdź produkt i zaktualizuj jego dane
+        $produkt = Produkt::findOrFail($id);
+        $produkt->nazwa = $request->input('nazwa');
+        $produkt->opis = $request->input('opis');
+        $produkt->cena = $request->input('cena');
+        //dd($request->all());
+        $produkt->save();
+
+        // Przekieruj z powrotem z wiadomością o sukcesie
+        return redirect()->back()->with('success', 'Produkt zaktualizowany.');
+    }
+
+
+
+public function delete($produktId)
+{
+    $produkt = Produkt::findOrFail($produktId);
+    $produkt->delete();
+
+    // Dodaj tutaj logikę obsługi usunięcia obrazka z dysku, jeśli to konieczne
+
+    return redirect()->back()->with('success', 'Produkt został usunięty.');
+}
+public function showSchedule()
+{
+    $grafik = Dostepnosc::where('hairdresser_id', 1)->get();
+
+    return view('layouts.admin.graf', compact('grafik'));
+}
+
+public function showClients()
+{
+    $users = User::where('role', 'user')->get(); // Pobierz użytkowników z rolą 'user'
+
+    return view('layouts.admin.lista', compact('users')); // Przekaż zmienne do widoku
+}
+
+  public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Dodaj tutaj logikę usunięcia powiązanych danych, np. avataru użytkownika
+        // Storage::delete('avatars/' . $user->avatar);
+
+        $user->delete();
+
+        return redirect()->back()->with('success', 'Użytkownik został usunięty.');
+    }
+
+    // ...
 }

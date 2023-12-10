@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">MigdaHair</a>
+            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">MatrasHair</a>
             <ul class="navbar-nav ml-auto">
                 @guest
                     <!-- Linki logowania i rejestracji -->
