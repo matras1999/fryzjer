@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Dostepnosc;
@@ -116,14 +117,21 @@ $selectedTimeCarbon = Carbon::parse($selectedTime);
     }
 
         $reservation = new Reservation();
-    $reservation->data = $wybierzDate; // Przyjmij, że dane są przesyłane w formularzu
-    $reservation->godzina_od = $selectedTime; // Wybrane godzina
-    // Dodanie minut do skopiowanego obiektu Carbon
-$reservation->godzina_do = $endTime->format('H:i');
-    $reservation->fryzjer_id = $dostepnosc->hairdresser_id; // Wybrany pracownik (fryzjer)
-    $reservation->usluga_id = $uslugaId;
-    $reservation->created_at = now();
-    $reservation->save();
+$reservation->data = $wybierzDate; // Przyjmij, że dane są przesyłane w formularzu
+$reservation->godzina_od = $selectedTime; // Wybrane godzina
+$reservation->godzina_do = $endTime->format('H:i'); // Zakładając, że $endTime to obiekt Carbon
+$reservation->fryzjer_id = $dostepnosc->hairdresser_id; // Wybrany pracownik (fryzjer)
+$reservation->usluga_id = $uslugaId;
+$reservation->created_at = now();
+
+// Tutaj przypisujemy zalogowanego użytkownika do rezerwacji
+$user = Auth::user(); // Pobierz zalogowanego użytkownika
+if ($user) {
+    $reservation->user_id = $user->id; // Przypisz ID zalogowanego użytkownika
+}
+
+$reservation->save();
+
 
 
     $noweDostepnosci = [];

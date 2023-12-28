@@ -11,7 +11,7 @@ class SmsController extends Controller
     {   //dd(env('TWILIO_SID'), env('TWILIO_TOKEN'));
 
         $sid = 'AC58658da51e044b0e324ebcfaf7d75ca4';
-        $token = 'e1a9b213ea94d50aceb17a1c789cb599';
+        $token = 'df0766a4a3d6bee1f414990e0fe1da69';
         $twilio_number = '+12296000161';
 
        

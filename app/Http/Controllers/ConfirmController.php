@@ -14,7 +14,7 @@ class ConfirmController extends Controller
     $phone = Auth::user()->phone;
 
     // Pobierz rezerwacje dla konkretnego klienta na podstawie imienia
-    $reservations = Reservation::where('imie_klienta', Auth::user()->name)
+    $reservations = Reservation::where('user_id', Auth::id())
         ->orderBy('data')
         ->get();
 

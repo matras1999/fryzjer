@@ -61,6 +61,9 @@ Route::post('/usunWszystkieProdukty',[KoszykController::class, 'usunWszystkiePro
 
 
 Route::post('/confirm-order', [OrderController::class, 'confirmOrder'])->name('confirmOrder');
+Route::post('/confirm-order', [OrderController::class, 'confirmOrder'])
+    ->name('confirmOrder')
+    ->middleware('auth');
 
 
 //admin1
@@ -97,4 +100,4 @@ Route::middleware(['can:isAdmin2'])->group(function () {
 
 Route::get('/show-confirmations', [ZatwierdzController::class, 'showConfirmations'])->name('show-confirmations');
 Route::get('/zatwierdz', [ZatwierdzController::class, 'processConfirmations'])->name('zatwierdz');
-
+Route::delete('/reservations/{reservation}', [ZatwierdzController::class, 'cancel'])->name('reservations.cancel');

@@ -13,6 +13,6 @@
     "\\resources\\views\\layouts\\admin2",
     "\\routes"
   ],
-  "SelectedNode": "\\app\\Http\\Controllers\\Controller.php",
+  "SelectedNode": "\\resources\\views\\welcome.blade.php",
   "PreviewInSolutionExplorer": false
 }

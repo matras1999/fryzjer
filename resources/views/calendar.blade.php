@@ -72,7 +72,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        var today = new Date();// Ustaw dzisiejszą datę w formacie 'YYYY-MM-DD'
+        var today = new Date();
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialDate: today,
@@ -85,12 +85,12 @@
             },
 
             validRange: {
-                start: today, // Ustawia zakres na dzisiejszy dzień jako start
+                start: today,
             },
             dateClick: function(info) {
                 var selectedDate = info.dateStr;
                 document.getElementById('displayedDate').textContent = selectedDate;
-                // Użyj AJAX, aby asynchronicznie pobrać i zaktualizować dane
+
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -104,7 +104,7 @@
                         var timeOptions = response.timeOptions;
                         var freeTimeSelect = document.getElementById('freeTime');
                         freeTimeSelect.innerHTML = '';
-                        // Dodaj pustą opcję, która jest wybrana domyślnie
+
                         var defaultOption = document.createElement('option');
                         defaultOption.value = "";
                         defaultOption.textContent = "";
@@ -113,7 +113,6 @@
                         defaultOption.hidden = true;
                         freeTimeSelect.appendChild(defaultOption);
 
-                        // Dodaj nowe opcje do select
                         for (var value in timeOptions) {
                             var option = document.createElement('option');
                             option.value = value;
@@ -121,7 +120,6 @@
                             freeTimeSelect.appendChild(option);
                         }
 
-                        // Wybierz pierwszą dostępną godzinę po pobraniu opcji
                         if (freeTimeSelect.options.length > 1) {
                             freeTimeSelect.options[1].selected = true;
                             document.getElementById('selectedTimeDisplay').textContent = 'Wybrana godzina: ' + freeTimeSelect.options[1].textContent;
@@ -138,7 +136,6 @@
             var selectedTime = this.options[this.selectedIndex].text;
             if (selectedTime !== "Wybierz godzinę") {
                 document.getElementById('selectedTimeDisplay').textContent = 'Wybrana godzina: ' + selectedTime;
-                // Aktualizuj wartość ukrytego pola formularza
                 document.getElementById('selectedTimeInput').value = selectedTime;
             } else {
                 document.getElementById('selectedTimeDisplay').textContent = '';
@@ -146,10 +143,17 @@
             }
         });
 
-        document.getElementById('confirmTime').addEventListener('click', function() {
+        document.getElementById('confirmTime').addEventListener('click', function(event) {
             var selectedTime = document.getElementById('freeTime').value;
-            console.log('Zatwierdzona godzina: ' + selectedTime);
-            // Tutaj możesz dodać logikę przetwarzania wybranej godziny
+            var selectedDate = document.getElementById('displayedDate').textContent;
+
+            if (selectedDate === "" || selectedTime === "") {
+                event.preventDefault();
+                alert('Proszę wybrać datę i godzinę.');
+            } else {
+                console.log('Zatwierdzona godzina: ' + selectedTime);
+                // Tutaj możesz dodać logikę przetwarzania wybranej godziny
+            }
         });
     });
 </script>

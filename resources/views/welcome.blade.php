@@ -105,10 +105,11 @@
 <div style="display: flex; justify-content: center; margin-left: 120px;">
         @if(auth()->check())
             <a href="{{ route('umow_wizyte') }}" class="btn btn-primary animowany-przycisk" style="margin-right: 10px;"> Umów wizytę </a>
+            <a href="{{ route('produkty') }}" class="btn btn-primary animowany-przycisk" style="margin-left: 10px;">Przejdź do sklepu</a>
         @else
             <a href="{{ route('login') }}" class="btn btn-primary animowany-przycisk" style="margin-left: 10px;"> Umów wizytę </a>
+            <a href="{{ route('login') }}" class="btn btn-primary animowany-przycisk" style="margin-left: 10px;">Przejdź do sklepu</a>
         @endif
-        <a href="{{ route('produkty') }}" class="btn btn-primary animowany-przycisk"  style="margin-left: 10px;">Przejdź do sklepu</a>
     </div>
     </div>
 </div>

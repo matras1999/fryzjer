@@ -103,12 +103,29 @@
             <div class="koszyk-summary">
                 <strong>Łącznie do zapłaty: <span id="total-price">{{ number_format($total, 2) }} zł</span></strong>
             </div>
-            <button type="submit" class="koszyk-button button">Złóż zamówienie</button>
+            <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="regulamin" name="regulamin">
+    <label class="form-check-label" for="regulamin">
+        Akceptuję regulamin sklepu  i zobowiązuję się do przestrzegania jego postanowień.
+    </label>
+</div>
+
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" id="rodo" name="rodo">
+    <label class="form-check-label" for="rodo">
+        Akceptuję przetwarzanie moich danych osobowych (RODO) zgodnie z polityką prywatności.
+    </label>
+</div>
+
+
+<!-- Dodaj to przed przyciskiem "Złóż zamówienie" -->
+<button type="submit" class="koszyk-button button" onclick="return validateForm()">Złóż zamówienie</button>
+
         </form>
         <form action="{{ route('usunWszystkieProdukty') }}" method="post">
             @csrf
             <div style="display: flex; justify-content: flex-end;">
-                <button type="submit" class="btn btn-danger">Usuń wszystkie produkty</button>
+                <button type="submit" class="btn btn-danger">Opróżnij koszyk</button>
             </div>
         </form>
     @else
@@ -183,9 +200,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Dodaj funkcję do walidacji zgód przed złożeniem zamówienia
+    function validateForm() {
+        const regulaminCheckbox = document.getElementById("regulamin");
+        const rodoCheckbox = document.getElementById("rodo");
+
+        if (!regulaminCheckbox.checked || !rodoCheckbox.checked) {
+            alert("Aby złożyć zamówienie, musisz zaakceptować regulamin i przetwarzanie danych osobowych (RODO).");
+            return false; // Zatrzymaj wysłanie formularza
+        }
+
+        // Kontynuuj wysłanie formularza, jeśli obie zgody są zaakceptowane
+        return true;
+    }
+
+    // Dodaj obsługę zdarzenia kliknięcia przycisku "Złóż zamówienie"
+    const submitButton = document.querySelector('.koszyk-button');
+    submitButton.addEventListener('click', function (event) {
+        if (!validateForm()) {
+            event.preventDefault(); // Zatrzymaj wysłanie formularza, jeśli zgody nie są zaakceptowane
+        }
+    });
 });
 </script>
-
 
 
 @endsection

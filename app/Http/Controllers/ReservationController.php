@@ -16,9 +16,10 @@ class ReservationController extends Controller
             // Dodaj inne reguły walidacji
         ]);
 
-        $user = Auth::user();
-
+         $user = Auth::user();
+        Log::debug('Zalogowany użytkownik ID: ' . $user->id);
         $reservation = new Reservation();
+        $reservation->user_id = $user->id; // Przypisanie ID użytkownika do rezerwacji
         $reservation->data = $request->input('data');
         $reservation->godzina = $request->input('godzina');
         $reservation->rodzaj = $request->input('rodzaj');

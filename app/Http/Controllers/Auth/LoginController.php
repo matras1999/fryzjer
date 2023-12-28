@@ -53,4 +53,5 @@ class LoginController extends Controller
     return '/home';
 }
 
+
 }
