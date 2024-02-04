@@ -16,9 +16,16 @@
         display: flex;
     }
 
+    #calendar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Wyśrodkowanie kalendarza i komunikatu */
+    }
+
     #calendar {
         width: 800px !important;
         margin: 40px 20px 0 20px;
+        position: relative;
     }
 
     #time-picker {
@@ -40,6 +47,13 @@
     #selectedTimeDisplay {
         margin-top: 20px;
     }
+
+    /* Dodajemy styl dla komunikatu o braku dostępnych terminów */
+    #noAvailabilityMessage {
+        color: red;
+        margin: 10px;
+        display: none; /* Ukrywamy na początku */
+    }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -48,12 +62,15 @@
 <body>
 
 <div class="container">
-    <div id='calendar'></div>
+    <div id='calendar-container'>
+        <div id='calendar'></div>
+    </div>
 
     <div id='time-picker'>
         <h3>Wybierz datę z kalendarza:</h3>
         <p id="selectedDate">Wybrana data:</p>
         <p><span id="displayedDate"></span></p>
+        <div id="noAvailabilityMessage">Brak dostępnych fryzjerów w tym dniu</div>
         <h3>Wybierz dostępną godzinę:</h3>
         <select id="freeTime" name="time">
             <option value="" selected disabled hidden>Wybierz godzinę</option>
@@ -69,93 +86,99 @@
     </div>
 </div>
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var today = new Date();
+    var calendarEl = document.getElementById('calendar');
+    var today = new Date();
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialDate: today,
-            firstDay: today.getDay(),
-            selectable: true,
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialDate: today,
+        firstDay: today.getDay(),
+        selectable: true,
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
 
-            validRange: {
-                start: today,
-            },
-            dateClick: function(info) {
-                var selectedDate = info.dateStr;
-                document.getElementById('displayedDate').textContent = selectedDate;
+        validRange: {
+            start: today,
+        },
+        dateClick: function(info) {
+            var selectedDate = info.dateStr;
+            document.getElementById('displayedDate').textContent = selectedDate;
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/time-options/' + selectedDate,
+                type: 'GET',
+                success: function(response) {
+                    var timeOptions = response.timeOptions;
+                    var freeTimeSelect = document.getElementById('freeTime');
+                    freeTimeSelect.innerHTML = '';
+
+                    var defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = "";
+                    defaultOption.selected = true;
+                    defaultOption.disabled = true;
+                    defaultOption.hidden = true;
+                    freeTimeSelect.appendChild(defaultOption);
+
+                    for (var value in timeOptions) {
+                        var option = document.createElement('option');
+                        option.value = value;
+                        option.textContent = timeOptions[value];
+                        freeTimeSelect.appendChild(option);
                     }
-                });
 
-                $.ajax({
-                    url: '/time-options/' + selectedDate,
-                    type: 'GET',
-                    success: function(response) {
-                        var timeOptions = response.timeOptions;
-                        var freeTimeSelect = document.getElementById('freeTime');
-                        freeTimeSelect.innerHTML = '';
-
-                        var defaultOption = document.createElement('option');
-                        defaultOption.value = "";
-                        defaultOption.textContent = "";
-                        defaultOption.selected = true;
-                        defaultOption.disabled = true;
-                        defaultOption.hidden = true;
-                        freeTimeSelect.appendChild(defaultOption);
-
-                        for (var value in timeOptions) {
-                            var option = document.createElement('option');
-                            option.value = value;
-                            option.textContent = timeOptions[value];
-                            freeTimeSelect.appendChild(option);
-                        }
-
-                        if (freeTimeSelect.options.length > 1) {
-                            freeTimeSelect.options[1].selected = true;
-                            document.getElementById('selectedTimeDisplay').textContent = 'Wybrana godzina: ' + freeTimeSelect.options[1].textContent;
-                            document.getElementById('selectedTimeInput').value = freeTimeSelect.options[1].textContent;
-                        }
+                    if (freeTimeSelect.options.length > 1) {
+                        freeTimeSelect.options[1].selected = true;
+                        document.getElementById('selectedTimeDisplay').textContent = 'Wybrana godzina: ' + freeTimeSelect.options[1].textContent;
+                        document.getElementById('selectedTimeInput').value = freeTimeSelect.options[1].textContent;
+                        // W tym miejscu możemy usunąć komunikat o braku wolnych terminów
+                        document.getElementById('noAvailabilityMessage').style.display = 'none';
+                    } else {
+                        // Brak dostępnych godzin - wyświetl komunikat
+                        document.getElementById('noAvailabilityMessage').style.display = 'block';
                     }
-                });
-            }
-        });
-
-        calendar.render();
-
-        document.getElementById('freeTime').addEventListener('change', function() {
-            var selectedTime = this.options[this.selectedIndex].text;
-            if (selectedTime !== "Wybierz godzinę") {
-                document.getElementById('selectedTimeDisplay').textContent = 'Wybrana godzina: ' + selectedTime;
-                document.getElementById('selectedTimeInput').value = selectedTime;
-            } else {
-                document.getElementById('selectedTimeDisplay').textContent = '';
-                document.getElementById('selectedTimeInput').value = '';
-            }
-        });
-
-        document.getElementById('confirmTime').addEventListener('click', function(event) {
-            var selectedTime = document.getElementById('freeTime').value;
-            var selectedDate = document.getElementById('displayedDate').textContent;
-
-            if (selectedDate === "" || selectedTime === "") {
-                event.preventDefault();
-                alert('Proszę wybrać datę i godzinę.');
-            } else {
-                console.log('Zatwierdzona godzina: ' + selectedTime);
-                // Tutaj możesz dodać logikę przetwarzania wybranej godziny
-            }
-        });
+                }
+            });
+        }
     });
+
+    calendar.render();
+
+    document.getElementById('freeTime').addEventListener('change', function() {
+        var selectedTime = this.options[this.selectedIndex].text;
+        if (selectedTime !== "Wybierz godzinę") {
+            document.getElementById('selectedTimeDisplay').textContent = 'Wybrana godzina: ' + selectedTime;
+            document.getElementById('selectedTimeInput').value = selectedTime;
+        } else {
+            document.getElementById('selectedTimeDisplay').textContent = '';
+            document.getElementById('selectedTimeInput').value = '';
+        }
+    });
+
+    document.getElementById('confirmTime').addEventListener('click', function(event) {
+        var selectedTime = document.getElementById('freeTime').value;
+        var selectedDate = document.getElementById('displayedDate').textContent;
+
+        if (selectedDate === "" || selectedTime === "") {
+            event.preventDefault();
+            alert('Proszę wybrać datę i godzinę.');
+        } else {
+            console.log('Zatwierdzona godzina: ' + selectedTime);
+            // Tutaj możesz dodać logikę przetwarzania wybranej godziny
+        }
+    });
+});
 </script>
 
 <!-- Cloudflare Pages Analytics -->
@@ -163,4 +186,5 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
 </body>
 </html>
+
 @endsection

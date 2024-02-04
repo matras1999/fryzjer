@@ -28,7 +28,8 @@ use App\Http\Controllers\KoszykController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome'); // Przekierowanie do strony głównej
+
 
 Auth::routes();
 
@@ -64,6 +65,9 @@ Route::post('/confirm-order', [OrderController::class, 'confirmOrder'])->name('c
 Route::post('/confirm-order', [OrderController::class, 'confirmOrder'])
     ->name('confirmOrder')
     ->middleware('auth');
+Route::get('/statystyki', function () {
+    return view('statystyki');
+});
 
 
 //admin1

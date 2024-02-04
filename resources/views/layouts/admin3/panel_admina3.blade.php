@@ -114,7 +114,7 @@
                 
                 <a href="{{ route('admin3.pokaz-grafik') }}" class="list-group-item list-group-item-action">Mój grafik</a>
                 
-                <a href="#" class="list-group-item list-group-item-action">Powiadomienia</a>
+               
                 
                 <!-- Dodaj więcej linków według potrzeb -->
             </div>

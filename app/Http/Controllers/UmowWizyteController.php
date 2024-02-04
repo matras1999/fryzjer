@@ -8,6 +8,12 @@ use App\Models\Fryzjer;
 
 class UmowWizyteController extends Controller
 {
+
+ public function __construct()
+    {
+        // Dodaj middleware 'auth', aby sprawdzić, czy użytkownik jest zalogowany
+        $this->middleware('auth');
+    }
   public function wyswietlUslugi()
 {
     $uslugi = Usluga::with('fryzjerzy')->get();

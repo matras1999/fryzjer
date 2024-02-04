@@ -117,7 +117,7 @@
                 <a href="{{ route('lista-klientow') }}" class="list-group-item list-group-item-action">Lista klientów</a>
 
                 
-                <a href="#" class="list-group-item list-group-item-action">Powiadomienia</a>
+                <a href="#" class="list-group-item list-group-item-action">Statystyki</a>
                 
                 <!-- Dodaj więcej linków według potrzeb -->
             </div>
